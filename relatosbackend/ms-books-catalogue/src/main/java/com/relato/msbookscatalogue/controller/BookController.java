@@ -39,6 +39,32 @@ public class BookController {
         return BookMapper.toResponse(book);
     }
 
+    @PutMapping("/{id}")
+    public BookResponseDTO update(@PathVariable Long id, @Valid @RequestBody BookRequestDTO dto) {
+        Book book = repository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Libro no encontrado"));
+
+        book.setTitle(dto.getTitle());
+        book.setAuthor(dto.getAuthor());
+        book.setCategory(dto.getCategory());
+        book.setIsbn(dto.getIsbn());
+        book.setRating(dto.getRating());
+        book.setPublicationDate(dto.getPublicationDate());
+        book.setVisible(dto.getVisible() != null ? dto.getVisible() : true);
+
+        return BookMapper.toResponse(repository.save(book));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        Book book = repository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Libro no encontrado"));
+
+        book.setDeleted(true);
+        repository.save(book);
+    }
+
     @GetMapping("/search")
     public List<BookResponseDTO> search(
             @RequestParam(required = false) String title,
