@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:acceptance": "playwright test tests/ui/compra.acceptance.playwright.js",
+    "test:functional": "playwright test tests/ui/catalogo.functional.playwright.js",
+    "test:load": "k6 run tests/load/books-search.k6.js"
   },
   "dependencies": {
     "react": "^19.2.0",
