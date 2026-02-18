@@ -1,0 +1,28 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+
+  cloud:
+    gateway:
+      routes:
+        - id: books-service
+          uri: lb://ms-books-catalogue
+          predicates:
+            - Path=/books/**
+
+        - id: payments-service
+          uri: lb://ms-books-payments
+          predicates:
+            - Path=/payments/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      enabled: true
